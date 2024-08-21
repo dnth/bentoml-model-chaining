@@ -45,7 +45,7 @@ class Captioner:
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         logger.info(f"Captioner using device: {device}")
-        self.pipeline = pipeline("image-to-text", model="Salesforce/blip2-opt-2.7b", device=device)
+        self.pipeline = pipeline("image-to-text", model="Salesforce/blip2-opt-2.7b", device=device, torch_dtype=torch.float16)
 
     @bentoml.api(batchable=True)
     async def caption(self, image: list[Image]) -> list[str]:
@@ -60,7 +60,7 @@ class ParallelBLIP2YOLO:
     captioning = bentoml.depends(Captioner)
 
     @bentoml.api()
-    async def parallel_inference(self, images: list[Image]) -> t.Tuple[list[list[dict]], list[str], float]:
+    async def parallel_inference(self, images: list[Image]) -> dict:
         start_time = time.time()
 
         object_detection, caption = await asyncio.gather(
@@ -69,7 +69,11 @@ class ParallelBLIP2YOLO:
         )
 
         end_time = time.time()
-        runtime = end_time - start_time
+        runtime = (end_time - start_time )  * 1000
         logger.info(f"Parallel inference took {runtime:.2f} seconds")
 
-        return object_detection, caption, runtime
+        return {
+            "object_detection": object_detection,
+            "caption": caption,
+            "runtime_ms": runtime
+        }
