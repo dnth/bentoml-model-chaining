@@ -1,0 +1,13 @@
+service: "service:ParallelBLIP2YOLO"
+labels:
+  project: yolo_blip2_parallel
+  stage: dev
+include:
+  - "service.py"
+python:
+  packages:
+  - torch
+  - transformers
+  - ultralytics
+docker:
+  python_version: 3.10
