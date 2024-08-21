@@ -9,5 +9,6 @@ python:
   - torch
   - transformers
   - ultralytics
+  - loguru
 docker:
   python_version: 3.10
