@@ -1,0 +1,12 @@
+service: "service:YoloV8"
+labels:
+  project: yolov8
+  stage: dev
+include:
+   - "*.py"
+   - "*.pt"
+python:
+  packages:
+  - ultralytics
+docker:
+  python_version: 3.10  
