@@ -49,3 +49,7 @@ Models:
 
 ## Run Chaining Pipeline
 Consists of running Image Tagger/Captioner -> Zero-shot Detection -> Segmentation
+
+
+## Build and Push to Deploy
+Build images and deploy to cloud.
