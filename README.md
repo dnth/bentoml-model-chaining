@@ -2,7 +2,7 @@
 Chain multiple models together using BentoML. Deploy anywhere Docker runs.
 
 
-## Run Object Detector
+## Object Detector
 Models:
 - YOLOv8
 
@@ -11,7 +11,7 @@ cd yolo/
 bentoml serve .
 ```
 
-## Run Image Captioner
+## Image Captioner
 Models:
 - BLIP2
 
@@ -20,7 +20,7 @@ cd blip2
 bentoml serve .
 ```
 
-## Run Image Tagger
+## Image Tagger
 Models:
 - RAM
 
@@ -28,26 +28,35 @@ Models:
 cd ram
 bentoml serve .
 ```
-## Run Image Classification
+## Image Classification
 Models:
 - ResNet50
 
-## Run Zero-shot Classification
+## Optical Character Recognition
+Models:
+- EasyOCR
+
+## Compute Embeddings
+Models:
+- CLIP
+- Sentence Transformers
+
+## Zero-shot Classification
 Models:
 - CLIP
 
-## Run Zero-shot Detection
+## Zero-shot Detection
 
 Models:
 - Grounding DINO
 - OWLv2
 
-## Run Zero-shot Segmentation
+## Zero-shot Segmentation
 Models:
 - SAM
 - SAM2
 
-## Run Chaining Pipeline
+## Run Pipeline
 Consists of running Image Tagger/Captioner -> Zero-shot Detection -> Segmentation
 
 
