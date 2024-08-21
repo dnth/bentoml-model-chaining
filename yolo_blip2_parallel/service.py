@@ -27,9 +27,6 @@ class ObjectDetector:
     @bentoml.api(batchable=True)
     async def predict(self, images: list[Image]) -> list[list[dict]]:
         results = self.model.predict(source=images)
-        # print("#####")
-        # print(results)
-        # print("#####")
         return [json.loads(result.tojson()) for result in results]
 
     @bentoml.api
