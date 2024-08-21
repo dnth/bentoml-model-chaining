@@ -1,0 +1,13 @@
+service: "service:ImageTagging"
+labels:
+  project: ram-taggin
+  stage: dev
+include:
+  - "service.py"
+python:
+  packages:
+  - torch
+  - transformers
+  - git+https://github.com/xinyu1205/recognize-anything.git
+docker:
+  python_version: 3.10
