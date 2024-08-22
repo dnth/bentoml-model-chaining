@@ -32,7 +32,7 @@ class ImageTagging:
 
     @bentoml.api()
     def tag(self, image: Image) -> dict:
-        image = self.transform(PILImage.open("demo1.jpg")).unsqueeze(0).to(self.device)
+        image = self.transform(PILImage.open(image)).unsqueeze(0).to(self.device)
         english_tags, chinese_tags = self.inference(image, self.model)
         english_tags = [tag.strip() for tag in english_tags.split("|")]
         chinese_tags = [tag.strip() for tag in chinese_tags.split("|")]
