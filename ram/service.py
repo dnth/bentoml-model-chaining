@@ -39,3 +39,16 @@ class ImageTagging:
         return {"english_tags": english_tags, "chinese_tags": chinese_tags}
 
     #TODO add batch inference
+
+    @bentoml.api()
+    def tag_image_url(self, image_url: str) -> dict:
+        import requests
+        from io import BytesIO
+
+        response = requests.get(image_url)
+        image = PILImage.open(BytesIO(response.content))
+        image = self.transform(image).unsqueeze(0).to(self.device)
+        english_tags, chinese_tags = self.inference(image, self.model)
+        english_tags = [tag.strip() for tag in english_tags.split("|")]
+        chinese_tags = [tag.strip() for tag in chinese_tags.split("|")]
+        return {"english_tags": english_tags, "chinese_tags": chinese_tags}
