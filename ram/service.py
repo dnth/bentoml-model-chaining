@@ -25,6 +25,7 @@ class ImageTagging:
         from ram.models import ram_plus
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Using device: {self.device}")
         self.transform = get_transform(image_size=384)
         self.inference = inference
 
@@ -46,6 +47,7 @@ class ImageTagging:
         )
         model.eval()
         self.model = model.to(self.device)
+        logger.info("Model loaded successfully")
     
     def download_model(self, url, path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
