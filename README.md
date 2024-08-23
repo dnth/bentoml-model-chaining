@@ -23,6 +23,7 @@ bentoml serve .
 ## Image Tagger
 Models:
 - RAM
+- RAM++
 
 ```bash
 cd ram
