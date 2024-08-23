@@ -12,6 +12,8 @@ import requests
 
 from loguru import logger
 from tqdm.auto import tqdm
+import requests
+from io import BytesIO
 
 Image = t.Annotated[Path, ContentType("image/*")]
 
@@ -72,20 +74,16 @@ class ImageTagging:
         logger.info(f"Model downloaded successfully to {path}")
 
     @bentoml.api()
-    def tag(self, image: Image) -> dict:
+    def tag_image_file(self, image: Image) -> dict:
         image = self.transform(PILImage.open(image)).unsqueeze(0).to(self.device)
         english_tags, chinese_tags = self.inference(image, self.model)
         english_tags = [tag.strip() for tag in english_tags.split("|")]
         chinese_tags = [tag.strip() for tag in chinese_tags.split("|")]
         return {"english_tags": english_tags, "chinese_tags": chinese_tags}
 
-    #TODO add batch inference
 
     @bentoml.api()
     def tag_image_url(self, image_url: str) -> dict:
-        import requests
-        from io import BytesIO
-
         response = requests.get(image_url)
         image = PILImage.open(BytesIO(response.content))
         image = self.transform(image).unsqueeze(0).to(self.device)
@@ -93,3 +91,12 @@ class ImageTagging:
         english_tags = [tag.strip() for tag in english_tags.split("|")]
         chinese_tags = [tag.strip() for tag in chinese_tags.split("|")]
         return {"english_tags": english_tags, "chinese_tags": chinese_tags}
+    
+    @bentoml.api(batchable=True)
+    def batch_tag_image_url(self, image_urls: list[str]) -> list[dict]: 
+        results = []
+        for image_url in image_urls:
+            tags = self.tag_image_url(image_url)
+            results.append({"english_tags": tags["english_tags"], "chinese_tags": tags["chinese_tags"]})
+        return results
+
