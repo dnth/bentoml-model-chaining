@@ -3,6 +3,7 @@ import requests
 import base64
 import json
 import logging
+from PIL import Image, ImageDraw
 
 def encode_image(image_file):
     return base64.b64encode(image_file.getvalue()).decode('utf-8')
@@ -31,6 +32,16 @@ def run_inference(image_file, task):
     logging.info(f"Response content: {response.text}")
     
     return response  # Return the raw response object
+
+def draw_bounding_boxes(image, detections):
+    draw = ImageDraw.Draw(image)
+    for detection in detections:
+        bbox = detection['box']
+        x1, y1, x2, y2 = bbox['x1'], bbox['y1'], bbox['x2'], bbox['y2']
+        draw.rectangle([x1, y1, x2, y2], outline="red", width=2)
+        label = f"{detection['name']} {detection['confidence']:.2f}"
+        draw.text((x1, y1 - 10), label, fill="red")
+    return image
 
 def main():
     logging.basicConfig(level=logging.INFO)
@@ -69,9 +80,17 @@ def main():
                     try:
                         result = run_inference(uploaded_file, "detect_objects_file")
                         st.success('Object detection complete!')
-                        st.json(result.json())
+                        result_json = result.json()
+                        st.json(result_json)
+                        
+                        # Plot the detection result
+                        image = Image.open(uploaded_file)
+                        image_with_boxes = draw_bounding_boxes(image, result_json)
+                        st.image(image_with_boxes, caption='Object Detection Result', use_column_width=True)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
+                        st.write("Full error details:")
+                        st.write(e)
 
 if __name__ == "__main__":
     main()
