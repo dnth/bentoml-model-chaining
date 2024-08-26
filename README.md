@@ -52,6 +52,11 @@ Models:
 - Grounding DINO
 - OWLv2
 
+```bash
+cd owlv2
+bentoml serve .
+```
+
 ## Zero-shot Segmentation
 Models:
 - SAM
