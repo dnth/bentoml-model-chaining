@@ -31,3 +31,9 @@ class YoloV8:
         output = image.parent.joinpath(f"{image.stem}_result{image.suffix}")
         result.save(str(output))
         return output
+    
+    @bentoml.api
+    def detect_objects_file(self, image: Image) -> list[dict]:
+        result = self.model.predict(image)[0]
+        print(result)
+        return json.loads(result.tojson())
