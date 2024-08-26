@@ -15,6 +15,8 @@ def run_inference(image_file, task):
         port = 3000
     elif task == "detect_objects_file":
         port = 3001
+    elif task == "caption_image_file":
+        port = 3002
     else:
         raise ValueError(f"Unknown task: {task}")
     
@@ -49,7 +51,7 @@ def main():
     st.title("Image Inference Demo")
     
     # Create tabs
-    tabs = st.tabs(["Image Tagging", "Object Detection"])
+    tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning"])
     
     # File uploader (shared between tabs)
     uploaded_file = st.sidebar.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -87,6 +89,21 @@ def main():
                         image = Image.open(uploaded_file)
                         image_with_boxes = draw_bounding_boxes(image, result_json)
                         st.image(image_with_boxes, caption='Object Detection Result', use_column_width=True)
+                    except Exception as e:
+                        st.error(f"An error occurred: {str(e)}")
+                        st.write("Full error details:")
+                        st.write(e)
+        
+        # Image Captioning tab
+        with tabs[2]:
+            st.header("Image Captioning")
+            if st.button('Run Image Captioning'):
+                with st.spinner('Running image captioning...'):
+                    try:
+                        result = run_inference(uploaded_file, "caption_image_file")
+                        st.success('Image captioning complete!')
+                        result_json = {"caption": result.text.strip()}
+                        st.json(result_json)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
                         st.write("Full error details:")

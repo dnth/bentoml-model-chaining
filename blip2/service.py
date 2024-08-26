@@ -25,3 +25,7 @@ class Captioning:
         results = self.pipeline(images)
         print(results)
         return [item["generated_text"] for sublist in results for item in sublist]
+    
+    @bentoml.api()
+    def caption_image_file(self, image: Image) -> str:
+        return self.caption([image])[0]
