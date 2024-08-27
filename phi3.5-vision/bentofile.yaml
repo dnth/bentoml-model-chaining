@@ -1,0 +1,21 @@
+service: "service:Phi35VisionService"
+labels:
+  owner: bentoml-team
+  project: gallery
+include:
+  - "*.py"
+python:
+  packages:
+    - torch
+    - transformers
+    - pillow
+    - requests
+    - flash-attn
+    - accelerate
+    - torchvision
+    - numpy
+docker:
+  python_version: 3.11
+  cuda_version: "12.1.1"
+  system_packages:
+    - git
