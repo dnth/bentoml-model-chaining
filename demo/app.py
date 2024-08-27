@@ -196,6 +196,8 @@ def main():
                         result = run_phi35_inference(uploaded_file, prompt)
                         st.success('Phi 3.5 Vision analysis complete!')
                         st.write(result)
+                        result_json = {"phi3.5_vision": result}
+                        st.json(result_json)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
                         st.write("Full error details:")
