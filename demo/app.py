@@ -105,7 +105,7 @@ def main():
     st.title("Image Inference Demo")
     
     # Create tabs
-    tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning", "Zero-Shot Detection", "Phi 3.5 Vision"])
+    tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning", "Zero-Shot Detection", "VQA"])
     
     st.sidebar.title("Input image")
     

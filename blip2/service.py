@@ -17,6 +17,7 @@ class Captioning:
         from transformers import pipeline
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
+        device = "cpu"
         self.pipeline = pipeline("image-to-text", model="Salesforce/blip2-opt-2.7b", device=device)
 
     @bentoml.api(batchable=True)

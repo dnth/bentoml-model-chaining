@@ -11,14 +11,11 @@ from bentoml.validators import ContentType
 Image = t.Annotated[Path, ContentType("image/*")]
 
 
-@bentoml.service(resources={"gpu": 1})
+@bentoml.service()
 class YoloV8:
     def __init__(self):
         from ultralytics import YOLO
-
-        yolo_model = os.getenv("YOLO_MODEL", "yolov8x.pt")
-
-        self.model = YOLO(yolo_model)
+        self.model = YOLO("yolov8s.pt")
 
     @bentoml.api(batchable=True)
     def predict(self, images: list[Image]) -> list[list[dict]]:
