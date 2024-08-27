@@ -107,6 +107,8 @@ def main():
     # Create tabs
     tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning", "Zero-Shot Detection", "Phi 3.5 Vision"])
     
+    st.sidebar.title("Input image")
+    
     # File uploader (shared between tabs)
     uploaded_file = st.sidebar.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     
@@ -116,6 +118,7 @@ def main():
         # Image Tagging tab
         with tabs[0]:
             st.header("Image Tagging - Recognize Anything Model Plus")
+            st.markdown("[Swagger UI](http://localhost:3000)")
             if st.button('Run Image Tagging'):
                 with st.spinner('Running image tagging...'):
                     try:
@@ -128,6 +131,7 @@ def main():
         # Object Detection tab
         with tabs[1]:
             st.header("Object Detection - YOLOv8x")
+            st.markdown("[Swagger UI](http://localhost:3001)")
             # Add confidence threshold slider
             confidence_threshold = st.slider("Confidence Threshold", 0.0, 1.0, 0.5, 0.01)
             if st.button('Run Object Detection'):
@@ -152,6 +156,7 @@ def main():
         # Image Captioning tab
         with tabs[2]:
             st.header("Image Captioning - BLIP2")
+            st.markdown("[Swagger UI](http://localhost:3002)")
             if st.button('Run Image Captioning'):
                 with st.spinner('Running image captioning...'):
                     try:
@@ -167,6 +172,7 @@ def main():
         # OWLv2 Zero-Shot Detection tab
         with tabs[3]:
             st.header("Zero-Shot Detection - OWLv2")
+            st.markdown("[Swagger UI](http://localhost:3003)")
             queries = st.text_input("Enter object queries (comma-separated)", "car")
             confidence_threshold = st.slider("Confidence Threshold", 0.0, 1.0, 0.3, 0.01)
             if st.button('Run OWLv2 Zero-Shot Detection'):
@@ -189,6 +195,7 @@ def main():
         # Phi 3.5 Vision tab
         with tabs[4]:
             st.header("Phi 3.5 Vision")
+            st.markdown("[Swagger UI](http://localhost:3004)")
             prompt = st.text_area("Enter your prompt", "Describe the image in detail, focusing on the main subjects, their actions, and the overall setting. Include information about colors, textures, and any notable objects or elements in the background.")
             if st.button('Run Phi 3.5 Vision'):
                 with st.spinner('Running Phi 3.5 Vision...'):

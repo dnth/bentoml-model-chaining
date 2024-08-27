@@ -23,7 +23,7 @@ class Phi35VisionService:
         self.processor = AutoProcessor.from_pretrained(
             model_id,
             trust_remote_code=True,
-            num_crops=4
+            num_crops=16
         )
 
     def _process_images(self, images: list[Image | str]) -> list[PILImage.Image]:
