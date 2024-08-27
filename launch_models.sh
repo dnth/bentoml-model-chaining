@@ -1,27 +1,59 @@
 #!/bin/bash
 
-# Start YOLO service
-cd yolo/
-bentoml serve . -p 3001 &
-cd ..
+# Color definitions
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
-# Start BLIP2 service
-cd blip2/
-bentoml serve . -p 3002 &
-cd ..
+# Function to start a service
+start_service() {
+    local service=$1
+    local port=$2
+    cd $service/
+    bentoml serve . -p $port &
+    cd ..
+    echo -e "${GREEN}Started $service service on port $port${NC}"
+}
 
-# Start RAM service
-cd ram/
-bentoml serve . -p 3000 &
-cd ..
+# Function to prompt user for service selection
+select_services() {
+    echo -e "${BLUE}Select services to start (space-separated numbers, or 'all'):${NC}"
+    echo -e "${YELLOW}1) RAM (port 3000)"
+    echo "2) YOLO (port 3001)"
+    echo "3) BLIP2 (port 3002)"
+    echo "4) OWLv2 (port 3003)"
+    echo -e "5) All services${NC}"
+    read -p "$(echo -e ${BLUE}Enter your choice: ${NC})" choice
+}
 
-# Start OWLv2 service
-cd owlv2/
-bentoml serve . -p 3003 &
-cd ..
+# Prompt user for service selection
+select_services
+
+# Start selected services
+if [[ $choice == "5" || $choice == "all" ]]; then
+    echo -e "${YELLOW}Starting all services...${NC}"
+    start_service "ram" 3000
+    start_service "yolo" 3001
+    start_service "blip2" 3002
+    start_service "owlv2" 3003
+else
+    for num in $choice; do
+        case $num in
+            1) start_service "ram" 3000 ;;
+            2) start_service "yolo" 3001 ;;
+            3) start_service "blip2" 3002 ;;
+            4) start_service "owlv2" 3003 ;;
+            *) echo -e "${RED}Invalid choice: $num${NC}" ;;
+        esac
+    done
+fi
 
 # Wait for services to start
+echo -e "${YELLOW}Waiting for services to start...${NC}"
 sleep 10
 
 # Launch Streamlit app
+echo -e "${GREEN}Launching Streamlit app...${NC}"
 streamlit run demo/app.py
