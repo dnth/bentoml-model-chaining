@@ -8,32 +8,38 @@ from PIL import Image, ImageDraw
 def encode_image(image_file):
     return base64.b64encode(image_file.getvalue()).decode('utf-8')
 
-def run_inference(image_file, task):
-    base_url = "http://localhost"
-    
-    if task == "tag_image_file":
-        port = 3000
-    elif task == "detect_objects_file":
-        port = 3001
-    elif task == "caption_image_file":
-        port = 3002
-    else:
-        raise ValueError(f"Unknown task: {task}")
-    
-    api_url = f"{base_url}:{port}/{task}"
-    
-    logging.info(f"Sending request to: {api_url}")
+def run_tag_image(image_file):
+    base_url = "http://localhost:3000"
+    api_url = f"{base_url}/tag_image_file"
     
     files = {
         'image': (image_file.name, image_file, 'image/jpeg')
     }
     
     response = requests.post(api_url, files=files)
+    return response.json()
+
+def run_detect_objects(image_file):
+    base_url = "http://localhost:3001"
+    api_url = f"{base_url}/detect_objects_file"
     
-    logging.info(f"Response status code: {response.status_code}")
-    logging.info(f"Response content: {response.text}")
+    files = {
+        'image': (image_file.name, image_file, 'image/jpeg')
+    }
     
-    return response 
+    response = requests.post(api_url, files=files)
+    return response.json()
+
+def run_caption_image(image_file):
+    base_url = "http://localhost:3002"
+    api_url = f"{base_url}/caption_image_file"
+    
+    files = {
+        'image': (image_file.name, image_file, 'image/jpeg')
+    }
+    
+    response = requests.post(api_url, files=files)
+    return response.text.strip()
 
 def draw_bounding_boxes_yolov8(image, detections, confidence_threshold=0.0):
     draw = ImageDraw.Draw(image)
@@ -99,11 +105,9 @@ def main():
             if st.button('Run Image Tagging'):
                 with st.spinner('Running image tagging...'):
                     try:
-                        result = run_inference(uploaded_file, "tag_image_file")
+                        result = run_tag_image(uploaded_file)
                         st.success('Image tagging complete!')
-                        # Parse the JSON content from the response
-                        result_json = result.json()
-                        st.json(result_json)
+                        st.json(result)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
         
@@ -115,9 +119,9 @@ def main():
             if st.button('Run Object Detection'):
                 with st.spinner('Running object detection...'):
                     try:
-                        result = run_inference(uploaded_file, "detect_objects_file")
+                        result = run_detect_objects(uploaded_file)
                         st.success('Object detection complete!')
-                        result_json = result.json()
+                        result_json = result
                         
                         # Display all detections in JSON
                         st.json(result_json)
@@ -137,9 +141,9 @@ def main():
             if st.button('Run Image Captioning'):
                 with st.spinner('Running image captioning...'):
                     try:
-                        result = run_inference(uploaded_file, "caption_image_file")
+                        result = run_caption_image(uploaded_file)
                         st.success('Image captioning complete!')
-                        result_json = {"caption": result.text.strip()}
+                        result_json = {"caption": result}
                         st.json(result_json)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
