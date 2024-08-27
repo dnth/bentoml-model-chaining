@@ -24,7 +24,8 @@ select_services() {
     echo "2) YOLO (port 3001)"
     echo "3) BLIP2 (port 3002)"
     echo "4) OWLv2 (port 3003)"
-    echo -e "5) All services${NC}"
+    echo "5) Phi 3.5 (port 3004)"
+    echo -e "6) All services${NC}"
     read -p "$(echo -e ${BLUE}Enter your choice: ${NC})" choice
 }
 
@@ -32,12 +33,13 @@ select_services() {
 select_services
 
 # Start selected services
-if [[ $choice == "5" || $choice == "all" ]]; then
+if [[ $choice == "6" || $choice == "all" ]]; then
     echo -e "${YELLOW}Starting all services...${NC}"
     start_service "ram" 3000
     start_service "yolo" 3001
     start_service "blip2" 3002
     start_service "owlv2" 3003
+    start_service "phi3.5-vision" 3004
 else
     for num in $choice; do
         case $num in
@@ -45,6 +47,7 @@ else
             2) start_service "yolo" 3001 ;;
             3) start_service "blip2" 3002 ;;
             4) start_service "owlv2" 3003 ;;
+            5) start_service "phi3.5-vision" 3004 ;;
             *) echo -e "${RED}Invalid choice: $num${NC}" ;;
         esac
     done

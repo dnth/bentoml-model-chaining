@@ -85,13 +85,27 @@ def run_owlv2_inference(image_file, queries, confidence_threshold):
     
     return response.json()
 
+def run_phi35_inference(image_file, prompt):
+    base_url = "http://localhost:3004"
+    api_url = f"{base_url}/caption_image"
+    
+    files = {
+        'image': (image_file.name, image_file, 'image/jpeg')
+    }
+    data = {
+        'prompt': prompt
+    }
+    
+    response = requests.post(api_url, files=files, data=data)
+    return response.text.strip()
+
 def main():
     logging.basicConfig(level=logging.INFO)
     
     st.title("Image Inference Demo")
     
     # Create tabs
-    tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning", "Zero-Shot Detection"])
+    tabs = st.tabs(["Image Tagging", "Object Detection", "Image Captioning", "Zero-Shot Detection", "Phi 3.5 Vision"])
     
     # File uploader (shared between tabs)
     uploaded_file = st.sidebar.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
@@ -167,6 +181,21 @@ def main():
                         image = Image.open(uploaded_file)
                         image_with_boxes = draw_bounding_boxes_owlv2(image, result, confidence_threshold)
                         st.image(image_with_boxes, caption='OWLv2 Detection Result', use_column_width=True)
+                    except Exception as e:
+                        st.error(f"An error occurred: {str(e)}")
+                        st.write("Full error details:")
+                        st.write(e)
+
+        # Phi 3.5 Vision tab
+        with tabs[4]:
+            st.header("Phi 3.5 Vision")
+            prompt = st.text_area("Enter your prompt", "Describe this image in detail.")
+            if st.button('Run Phi 3.5 Vision'):
+                with st.spinner('Running Phi 3.5 Vision...'):
+                    try:
+                        result = run_phi35_inference(uploaded_file, prompt)
+                        st.success('Phi 3.5 Vision analysis complete!')
+                        st.write(result)
                     except Exception as e:
                         st.error(f"An error occurred: {str(e)}")
                         st.write("Full error details:")

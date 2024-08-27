@@ -85,5 +85,9 @@ class Phi35VisionService:
         return self.analyze(images, "Summarize the sequence of images as if they were frames from a video clip.")
     
     @bentoml.api()
-    def caption_image(self, image: Image) -> str:
-        return self.analyze([image], "Generate a detailed and descriptive caption for this image.")
+    def caption_image(self, image: Image, prompt: str) -> str:
+        # Process the single image
+        pil_image = self._process_images([image])[0]
+        
+        # Generate the caption
+        return self._generate_response([pil_image], prompt)
