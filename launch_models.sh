@@ -19,7 +19,7 @@ start_service() {
 
 # Function to prompt user for service selection
 select_services() {
-    echo -e "${BLUE}Select services to start (space-separated numbers, or 'all'):${NC}"
+    echo -e "${BLUE}Select services to start (comma-separated numbers, or 'all'):${NC}"
     echo -e "${YELLOW}1) RAM (port 3000)"
     echo "2) YOLO (port 3001)"
     echo "3) BLIP2 (port 3002)"
@@ -41,7 +41,8 @@ if [[ $choice == "6" || $choice == "all" ]]; then
     start_service "owlv2" 3003
     start_service "phi3.5-vision" 3004
 else
-    for num in $choice; do
+    IFS=',' read -ra SERVICES <<< "$choice"
+    for num in "${SERVICES[@]}"; do
         case $num in
             1) start_service "ram" 3000 ;;
             2) start_service "yolo" 3001 ;;

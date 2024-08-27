@@ -189,7 +189,7 @@ def main():
         # Phi 3.5 Vision tab
         with tabs[4]:
             st.header("Phi 3.5 Vision")
-            prompt = st.text_area("Enter your prompt", "Describe this image in detail.")
+            prompt = st.text_area("Enter your prompt", "Describe the image in detail, focusing on the main subjects, their actions, and the overall setting. Include information about colors, textures, and any notable objects or elements in the background.")
             if st.button('Run Phi 3.5 Vision'):
                 with st.spinner('Running Phi 3.5 Vision...'):
                     try:
