@@ -63,31 +63,59 @@ class Phi35VisionService:
             clean_up_tokenization_spaces=False
         )[0]
 
-    @bentoml.api(batchable=True)
-    def analyze(self, images: list[Image | str], prompt: str) -> str:
-        pil_images = self._process_images(images)
-        return self._generate_response(pil_images, prompt)
+    # @bentoml.api(batchable=True)
+    # def analyze(self, images: list[Image | str], prompt: str) -> str:
+    #     pil_images = self._process_images(images)
+    #     return self._generate_response(pil_images, prompt)
 
-    @bentoml.api()
-    def ocr(self, image: Image) -> str:
-        return self.analyze([image], "Perform OCR on this image and extract all the text you can see.")
+    # @bentoml.api()
+    # def ocr(self, image: Image) -> str:
+    #     return self.analyze([image], "Perform OCR on this image and extract all the text you can see.")
 
-    @bentoml.api()
-    def chart_analysis(self, image: Image) -> str:
-        return self.analyze([image], "Analyze this chart or table. Describe its type, main components, and key insights.")
+    # @bentoml.api()
+    # def chart_analysis(self, image: Image) -> str:
+    #     return self.analyze([image], "Analyze this chart or table. Describe its type, main components, and key insights.")
 
-    @bentoml.api()
-    def compare_images(self, images: list[Image]) -> str:
-        return self.analyze(images, "Compare these images and describe the similarities and differences.")
+    # @bentoml.api()
+    # def compare_images(self, images: list[Image]) -> str:
+    #     return self.analyze(images, "Compare these images and describe the similarities and differences.")
 
-    @bentoml.api()
-    def summarize_sequence(self, images: list[Image]) -> str:
+    # @bentoml.api()
+    # def summarize_sequence(self, images: list[Image]) -> str:
         return self.analyze(images, "Summarize the sequence of images as if they were frames from a video clip.")
     
     @bentoml.api()
-    def caption_image(self, image: Image, prompt: str) -> str:
-        # Process the single image
+    def caption_image_file(self, image: Image) -> str:
+        prompt = "Describe the image in detail, focusing on the main subjects, their actions, and the overall setting. Include information about colors, textures, and any notable objects or elements in the background."
         pil_image = self._process_images([image])[0]
-        
-        # Generate the caption
+        return self._generate_response([pil_image], prompt)
+    
+    @bentoml.api()
+    def caption_image_url(self, image_url: str) -> str:
+        prompt = "Describe the image in detail, focusing on the main subjects, their actions, and the overall setting. Include information about colors, textures, and any notable objects or elements in the background."
+        pil_image = self._process_images([image_url])[0]
+        return self._generate_response([pil_image], prompt)
+
+    @bentoml.api()
+    def ocr_image_file(self, image: Image) -> str:
+        prompt = "Perform OCR on this image and extract all the text you can see."
+        pil_image = self._process_images([image])[0]
+        return self._generate_response([pil_image], prompt)
+    
+    @bentoml.api()
+    def ocr_image_url(self, image_url: str) -> str:
+        prompt = "Perform OCR on this image and extract all the text you can see."
+        pil_image = self._process_images([image_url])[0]
+        return self._generate_response([pil_image], prompt)
+
+    @bentoml.api()
+    def chart_analysis_image_file(self, image: Image) -> str:
+        prompt = "Analyze this chart or table. Describe its type, main components, and key insights."
+        pil_image = self._process_images([image])[0]
+        return self._generate_response([pil_image], prompt)
+    
+    @bentoml.api()
+    def chart_analysis_image_url(self, image_url: str) -> str:
+        prompt = "Analyze this chart or table. Describe its type, main components, and key insights."
+        pil_image = self._process_images([image_url])[0]
         return self._generate_response([pil_image], prompt)
