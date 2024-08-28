@@ -87,7 +87,7 @@ def run_owlv2_inference(image_file, queries, confidence_threshold):
 
 def run_phi35_inference(image_file, prompt):
     base_url = "http://localhost:3004"
-    api_url = f"{base_url}/caption_image"
+    api_url = f"{base_url}/analyze_image_file"
     
     files = {
         'image': (image_file.name, image_file, 'image/jpeg')

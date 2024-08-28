@@ -119,3 +119,13 @@ class Phi35VisionService:
         prompt = "Analyze this chart or table. Describe its type, main components, and key insights."
         pil_image = self._process_images([image_url])[0]
         return self._generate_response([pil_image], prompt)
+    
+    @bentoml.api()
+    def analyze_image_file(self, image: Image, prompt: str) -> str:
+        pil_image = self._process_images([image])[0]
+        return self._generate_response([pil_image], prompt)
+    
+    @bentoml.api()
+    def analyze_image_url(self, image_url: str, prompt: str) -> str:
+        pil_image = self._process_images([image_url])[0]
+        return self._generate_response([pil_image], prompt)
