@@ -1,21 +1,25 @@
 service: "service:Phi35VisionService"
 labels:
-  owner: bentoml-team
-  project: gallery
+  owner: dnth
+  project: phi3.5-vision
 include:
   - "*.py"
 python:
   packages:
-    - torch
-    - transformers
-    - pillow
-    - requests
-    - flash-attn
-    - accelerate
-    - torchvision
-    - numpy
+  - "torch==2.3.1+cu118"
+  - "torchvision==0.18.1+cu118"
+  - "transformers==4.43.0"
+  - "accelerate==0.30.0"
+  - "packaging"
+  - "ninja"
+  - "pydantic"
+  - "pillow"
+  - "numpy"
+  - "requests"
+  extra_index_url:
+    - "https://download.pytorch.org/whl/cu118"
+  wheels:
+    - ./flash_attn-2.5.8+cu118torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
 docker:
-  python_version: 3.11
-  cuda_version: "12.1.1"
-  system_packages:
-    - git
+  python_version: "3.10"
+  cuda_version: "11.8"

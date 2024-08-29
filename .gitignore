@@ -1,6 +1,7 @@
 # ignore .pt files
 *.pt
 *.pth
+*.whl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
