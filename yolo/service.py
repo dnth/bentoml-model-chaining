@@ -24,7 +24,7 @@ class YoloV8:
 
     @bentoml.api(batchable=True)
     def detect_urls(self, urls: list[str]) -> list[list[dict]]:
-        results = self.model.predict(source=urls)
+        results = self.model.predict(source=urls) # TODO: handle cases where url does not end with image extentions like jpg
         return [json.loads(result.tojson()) for result in results]
 
     @bentoml.api
@@ -36,7 +36,7 @@ class YoloV8:
 
     @bentoml.api
     def render_detect_url(self, url: str) -> Image:
-        result = self.model.predict(url)[0]
+        result = self.model.predict(url)[0] # TODO: handle cases where url does not end with image extentions like jpg
         output = Path("result.jpg")
         result.save(str(output))
         return output
