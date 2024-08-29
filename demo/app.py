@@ -21,7 +21,7 @@ def run_tag_image(image_file):
 
 def run_detect_objects(image_file):
     base_url = "http://localhost:3001"
-    api_url = f"{base_url}/detect_objects_file"
+    api_url = f"{base_url}/detect_file"
     
     files = {
         'image': (image_file.name, image_file, 'image/jpeg')

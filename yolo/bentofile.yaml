@@ -9,4 +9,10 @@ python:
   packages:
   - ultralytics
 docker:
-  python_version: 3.10  
+  python_version: "3.10"
+  system_packages:
+    - libgl1-mesa-dev
+    - libglib2.0-0
+    - libsm6
+    - libxext6
+    - libxrender1
