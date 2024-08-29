@@ -37,7 +37,6 @@ class YoloV8:
     @bentoml.api
     def render_detect_url(self, url: str) -> Image:
         result = self.model.predict(url)[0]
-        output_filename = f"result_{hash(url)}.jpg"
-        output = Path(output_filename)
+        output = Path("result.jpg")
         result.save(str(output))
         return output
