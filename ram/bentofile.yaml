@@ -4,7 +4,7 @@ labels:
   stage: dev
 include:
   - "service.py"
-  - "*.pt"
+  - "ram_swin_large_14m.pth"
 python:
   packages:
   - "torch==2.3.1+cu121"
