@@ -7,6 +7,9 @@ from pathlib import Path
 import bentoml
 from bentoml.validators import ContentType
 
+import torch
+from loguru import logger
+
 Image = t.Annotated[Path, ContentType("image/*")]
 
 
@@ -15,7 +18,9 @@ class YoloV8:
     def __init__(self):
         from ultralytics import YOLO
 
-        self.model = YOLO("yolov8s.pt")
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        logger.info(f"Using device: {device}")
+        self.model = YOLO("yolov8s.pt").to(device)
 
     @bentoml.api(batchable=True)
     def detect_files(self, images: list[Image]) -> list[list[dict]]:
