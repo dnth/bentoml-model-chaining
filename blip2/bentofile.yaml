@@ -1,4 +1,4 @@
-service: "service:Captioning"
+service: "service:Blip2Captioning"
 labels:
   project: blip2-captioning
   stage: dev
@@ -6,7 +6,12 @@ include:
   - "service.py"
 python:
   packages:
-  - torch
-  - transformers
+  - "torch==2.3.1+cu121"
+  - "transformers==4.44.2"
+  - "Pillow"
+  - "loguru"
+  extra_index_url:
+    - "https://download.pytorch.org/whl/cu121"
 docker:
-  python_version: 3.10
+  python_version: 3.11
+  cuda_version: "12.1"
