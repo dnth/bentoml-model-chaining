@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from io import BytesIO
 
 import bentoml
@@ -11,6 +12,7 @@ from ram import get_transform
 from ram import inference_ram as inference
 from ram.models import ram
 from transformers import pipeline
+
 from ultralytics import YOLO
 
 
@@ -69,15 +71,14 @@ class Blip2:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Using device: {self.device}")
 
-        model_name = "Salesforce/blip2-opt-2.7b"
         try:
             self.model = pipeline(
                 "image-to-text",
-                model=model_name,
+                model="Salesforce/blip2-opt-2.7b",
                 device=self.device,
                 torch_dtype=torch.float16,
             )
-            logger.info(f"BLIP-2 model '{model_name}' loaded successfully")
+            logger.info(f"BLIP-2 model loaded successfully")
         except Exception as e:
             logger.error(f"Error loading BLIP-2 model: {str(e)}")
             raise
@@ -90,14 +91,24 @@ class EnrichmentModels:
         self.ram = RecognizeAnythingModel()
         self.blip2 = Blip2()
 
+    def _log_inference_latency(self, start_time):
+        end_time = time.time()
+        latency = (end_time - start_time) * 1000  # Convert to milliseconds
+        logger.debug(f"Inference latency: {latency:.2f} ms")
+        if latency > 5000:  # Log a warning if inference takes more than 5 seconds
+            logger.warning(f"High inference latency detected: {latency:.2f} ms")
+
     @bentoml.api(batchable=True, max_batch_size=20)
     def detect_urls(self, urls: list[str]) -> list[list[dict]]:
+        start_time = time.time()
         results = self.yolov8.model.predict(source=urls, imgsz=640)
+        self._log_inference_latency(start_time)
         return [json.loads(result.tojson()) for result in results]
 
     @bentoml.api(batchable=True, max_batch_size=20)
     def tag_urls(self, urls: list[str]) -> list[list[str]]:
         logger.info(f"Running batch inference for {len(urls)} image URLs")
+        start_time = time.time()
         results = []
         for url in urls:
             response = requests.get(url)
@@ -107,12 +118,15 @@ class EnrichmentModels:
                 english_tags, _ = self.ram.inference(image, self.ram.model)
             english_tags = [tag.strip() for tag in english_tags.split("|")]
             results.append(english_tags)
+        self._log_inference_latency(start_time)
         return results
 
     @bentoml.api(batchable=True, max_batch_size=20)
     def caption_urls(self, image_urls: list[str]) -> list[str]:
         logger.info(f"Running batch inference for {len(image_urls)} image URLs")
+        start_time = time.time()
         responses = [requests.get(url) for url in image_urls]
         images = [PIL.Image.open(BytesIO(response.content)) for response in responses]
         captions = self.blip2.model(images)
+        self._log_inference_latency(start_time)
         return [caption[0]["generated_text"] for caption in captions]
