@@ -12,8 +12,9 @@ from ram import get_transform
 from ram import inference_ram as inference
 from ram.models import ram
 from transformers import pipeline
-
 from ultralytics import YOLO
+
+logger.add("bentoml.log", rotation="1 day", retention="10 days", compression="zip")
 
 
 class YOLOv8:
