@@ -1,0 +1,28 @@
+service: "service:EnrichmentModels"
+labels:
+  project: enrichment-models
+  stage: dev
+include:
+   - "*.py"
+   - "*.pt"
+   - "*.pth"
+python:
+  packages:
+    - "torch==2.3.1+cu121"
+    - "transformers==4.44.2"
+    - Pillow
+    - ultralytics
+    - loguru
+    - ram @ git+https://github.com/dnth/recognize-anything.git
+  extra_index_url:
+    - "https://download.pytorch.org/whl/cu121"
+docker:
+  python_version: "3.11"
+  cuda_version: "12.1"
+  system_packages:
+    - libgl1-mesa-dev
+    - libglib2.0-0
+    - libsm6
+    - libxext6
+    - libxrender1
+    - git
