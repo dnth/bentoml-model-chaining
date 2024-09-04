@@ -7,10 +7,10 @@ from pathlib import Path
 
 import bentoml
 import requests
+import torch
 from bentoml.validators import ContentType
 from loguru import logger
 from PIL import Image as PILImage
-import torch
 
 Image = t.Annotated[Path, ContentType("image/*")]
 
