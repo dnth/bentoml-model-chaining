@@ -6,6 +6,7 @@ include:
    - "*.py"
    - "*.pt"
    - "*.pth"
+   - "blip2-fp16/"
 python:
   packages:
     - "torch==2.3.1+cu121"

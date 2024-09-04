@@ -2,6 +2,7 @@
 *.pt
 *.pth
 *.whl
+blip2-fp16/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

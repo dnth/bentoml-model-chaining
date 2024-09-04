@@ -75,10 +75,12 @@ class Blip2:
         try:
             self.model = pipeline(
                 "image-to-text",
-                model="Salesforce/blip2-opt-2.7b",
+                model="blip2-fp16",
                 device=self.device,
                 torch_dtype=torch.float16,
             )
+
+            # self.model.save_pretrained("blip2-fp16/")
             logger.info(f"BLIP-2 model loaded successfully")
         except Exception as e:
             logger.error(f"Error loading BLIP-2 model: {str(e)}")
