@@ -36,7 +36,7 @@ class YoloV8:
         self._log_inference_latency(start_time)
         return result
 
-    @bentoml.api(batchable=True)
+    @bentoml.api(batchable=True, max_batch_size=20)
     def detect_files(self, images: list[Image]) -> list[list[dict]]:
         start_time = time.time()
         results = self.model.predict(source=images)
@@ -44,7 +44,7 @@ class YoloV8:
             start_time, [json.loads(result.tojson()) for result in results]
         )
 
-    @bentoml.api(batchable=True)
+    @bentoml.api(batchable=True, max_batch_size=20)
     def detect_urls(self, urls: list[str]) -> list[list[dict]]:
         results = self.model.predict(
             source=urls

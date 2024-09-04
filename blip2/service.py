@@ -47,7 +47,7 @@ class Blip2Captioning:
         logger.debug(f"Inference completed, generated {len(results)} captions")
         return [item["generated_text"] for sublist in results for item in sublist]
 
-    @bentoml.api(batchable=True)
+    @bentoml.api(batchable=True, max_batch_size=20)
     def batch_caption_image_files(self, image: list[Image]) -> list[dict]:
         logger.info(f"Running batch inference for {len(image)} images")
         images = [PILImage.open(img) for img in image]
@@ -68,7 +68,7 @@ class Blip2Captioning:
         caption = self.run_inference([image])[0]
         return {"caption": caption}
 
-    @bentoml.api(batchable=True)
+    @bentoml.api(batchable=True, max_batch_size=20)
     def batch_caption_image_urls(self, image_urls: list[str]) -> list[dict]:
         logger.info(f"Running batch inference for {len(image_urls)} image URLs")
         responses = [requests.get(url) for url in image_urls]
