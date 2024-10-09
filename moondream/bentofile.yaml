@@ -1,0 +1,24 @@
+service: "service:MoondreamService"
+labels:
+  owner: dnth
+  project: moondream
+include:
+  - "*.py"
+  - moondream2/
+python:
+  packages:
+    - "torch==2.3.1+cu118"
+    - "torchvision==0.18.1+cu118"
+    - "transformers==4.43.0"
+    - "accelerate==0.30.0"
+    - "pydantic==2.8.2"
+    - "pillow"
+    - "numpy"
+    - "requests"
+  extra_index_url:
+    - "https://download.pytorch.org/whl/cu118"
+  wheels:
+    - ./flash_attn-2.5.8+cu118torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
+docker:
+  python_version: "3.10"
+  cuda_version: "11.8"
