@@ -3,6 +3,7 @@
 *.pth
 *.whl
 blip2-fp16/
+models-phi-35-vision/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

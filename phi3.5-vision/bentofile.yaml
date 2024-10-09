@@ -4,6 +4,7 @@ labels:
   project: phi3.5-vision
 include:
   - "*.py"
+  - "models-phi-35-vision/"
 python:
   packages:
   - "torch==2.3.1+cu118"
@@ -12,7 +13,7 @@ python:
   - "accelerate==0.30.0"
   - "packaging"
   - "ninja"
-  - "pydantic"
+  - "pydantic==2.8.2"
   - "pillow"
   - "numpy"
   - "requests"
