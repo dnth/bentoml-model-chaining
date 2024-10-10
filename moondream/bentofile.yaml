@@ -4,21 +4,23 @@ labels:
   project: moondream
 include:
   - "*.py"
-  - moondream2/
+  - "moondream2/*"
 python:
   packages:
-    - "torch==2.3.1+cu118"
-    - "torchvision==0.18.1+cu118"
-    - "transformers==4.43.0"
+    - "torch==2.2.0+cu121"
+    - "torchvision==0.17.0+cu121"
+    - "transformers==4.45.2"
     - "accelerate==0.30.0"
     - "pydantic==2.8.2"
     - "pillow"
-    - "numpy"
+    - "numpy<2.0.0"
     - "requests"
+    - "loguru"
+    - "einops==0.8.0"
   extra_index_url:
-    - "https://download.pytorch.org/whl/cu118"
+    - "https://download.pytorch.org/whl/cu121"
   wheels:
-    - ./flash_attn-2.5.8+cu118torch2.3cxx11abiFALSE-cp310-cp310-linux_x86_64.whl
+    - ./flash_attn-2.6.3-cp310-cp310-linux_x86_64.whl
 docker:
   python_version: "3.10"
-  cuda_version: "11.8"
+  cuda_version: "12.1"
