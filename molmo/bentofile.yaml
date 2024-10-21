@@ -1,0 +1,9 @@
+service: "service:MolmoService"
+labels:
+  owner: dnth
+  project: molmo
+include:
+  - "*.py"
+python:
+  packages:
+    - "vllm"
