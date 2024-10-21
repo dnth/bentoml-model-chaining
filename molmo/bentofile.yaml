@@ -4,15 +4,17 @@ labels:
   project: molmo
 include:
   - "*.py"
+  - "molmo_7b_d_0924/*"
 python:
+  index_url: "https://pypi.org/simple"
   packages:
-    - "torch==2.4.0+cu121"
-    - "torchvision==0.19.0+cu121"
+    - "torch==2.4.0"
+    - "torchvision==0.19.0"
     - "vllm==0.6.3.post1"
     - "requests"
     - "loguru"
-  extra_index_url:
-    - "https://download.pytorch.org/whl/cu121"
+  # extra_index_url:
+  #   - "https://download.pytorch.org/whl/cu121"
 docker:
   python_version: "3.10"
   cuda_version: "12.1"

@@ -11,11 +11,14 @@ from vllm import LLM, SamplingParams
 
 Image = t.Annotated[Path, ContentType("image/*")]
 
+# Download model from huggingface into local directory
+# huggingface-cli download allenai/Molmo-7B-D-0924 --local-dir molmo_7b_d_0924
+
 
 @bentoml.service()
 class MolmoService:
     def __init__(self):
-        model_id = "allenai/Molmo-7B-D-0924"
+        model_id = "molmo_7b_d_0924/"
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         logger.info(f"Using device: {self.device}")
 
