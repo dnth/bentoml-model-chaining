@@ -28,7 +28,6 @@ class MolmoService:
     @bentoml.api()
     def caption_image_url(self, image_url: str) -> str:
         prompt = "Describe this image."
-        stop_token_ids = None
         sampling_params = SamplingParams(temperature=0.2, max_tokens=20)
 
         image = PILImage.open(requests.get(image_url, stream=True).raw).convert("RGB")
@@ -41,3 +40,23 @@ class MolmoService:
         outputs = self.llm.generate(inputs, sampling_params=sampling_params)
         generated_text = outputs[0].outputs[0].text
         return generated_text
+
+    @bentoml.api(batchable=True, max_batch_size=10)
+    def caption_image_urls(self, image_urls: list[str]) -> list[str]:
+        prompt = "Describe this image."
+        sampling_params = SamplingParams(temperature=0.2, max_tokens=20)
+
+        batch_inputs = [
+            {
+                "prompt": f"USER: <image>\n{prompt}\nASSISTANT:",
+                "multi_modal_data": {
+                    "image": PILImage.open(
+                        requests.get(image_url, stream=True).raw
+                    ).convert("RGB")
+                },
+            }
+            for image_url in image_urls
+        ]
+
+        outputs = self.llm.generate(batch_inputs, sampling_params=sampling_params)
+        return [output.outputs[0].text for output in outputs]
