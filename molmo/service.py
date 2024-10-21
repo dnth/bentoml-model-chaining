@@ -28,7 +28,7 @@ class MolmoService:
     @bentoml.api()
     def caption_image_url(self, image_url: str) -> str:
         prompt = "Describe this image."
-        sampling_params = SamplingParams(temperature=0.2, max_tokens=20)
+        sampling_params = SamplingParams(temperature=0.0, max_tokens=20)
 
         image = PILImage.open(requests.get(image_url, stream=True).raw).convert("RGB")
 
@@ -44,7 +44,7 @@ class MolmoService:
     @bentoml.api(batchable=True, max_batch_size=10)
     def caption_image_urls(self, image_urls: list[str]) -> list[str]:
         prompt = "Describe this image."
-        sampling_params = SamplingParams(temperature=0.2, max_tokens=20)
+        sampling_params = SamplingParams(temperature=0.0, max_tokens=20)
 
         batch_inputs = [
             {
